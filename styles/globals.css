@@ -1,26 +1,131 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+@layer components {
+  .text-hover {
+    @apply text-mainColor duration-300;
   }
-  body {
-    color: white;
-    background: black;
+}
+
+.style-group {
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  z-index: 20;
+  transition-duration: 500ms;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 25px 0;
+  top: 150px;
+  gap: 25px;
+  background: rgba(255, 255, 255, 0.94);
+  transition: all 0.5s;
+}
+
+.style-group-mobile {
+  visibility: hidden;
+  opacity: 0;
+  z-index: 20;
+  transition-duration: 500ms;
+}
+
+.style-headerscrolled {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 50;
+  transition: all 1s ease-in-out;
+  transition-duration: 500ms;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.style-img{
+  transition: all 2s ease-in-out;
+}
+
+.box-zoom-transfer {
+  height: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.close-open{
+  transform: translateX(-500px);
+
+}
+
+.ring-circle {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: transparent;
+  border: 1px solid #9c191e;
+  border-radius: 50%;
+  position: absolute;
+  animation: ring 1s linear infinite;
+}
+
+.ring-background {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: transparent;
+  border: 15px solid #f3f4f6;
+  border-radius: 50%;
+  position: absolute;
+  animation: ringbackground 1s linear infinite;
+}
+
+.img-rotate {
+  animation: rotate 3s linear infinite alternate;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: #9c191e !important;
+}
+
+@keyframes ringbackground {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.2, 1.2);
+  }
+}
+
+@keyframes ring {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5, 1.5);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(8deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(8deg);
+  }
+  100% {
+    transform: rotate(-8deg);
   }
 }
