@@ -25,7 +25,7 @@ const MenuHeader = () => {
 
   const listNav = [
     { title: "Menu", link: "/products" },
-    { title: "Chuyện Nhà", link: "/" },
+    { title: "Chuyện Nhà", link: "/story" },
     { title: "Cà phê", link: "/" },
     { title: "Trà", link: "/" },
     { title: "Cảm hứng CloundFee", link: "/" },
@@ -97,7 +97,9 @@ const MenuHeader = () => {
       className={
         scrolled
           ? "style-headerscrolled"
-          : "border-t border-b  border-gray-200 relative bg-[#fcf7f7] duration-300 ease-in-out w-full"
+          : `border-t border-b  border-gray-200 relative bg-[#fcf7f7] duration-300 ease-in-out w-full ${
+              openMenuMobile ? "bg-black" : ""
+            }`
       }
     >
       <div className="max-w-7xl mx-auto flex justify-center relative flex-row lg:gap-16 lg:px-8 py-4">
