@@ -26,10 +26,10 @@ const MenuHeader = () => {
   const listNav = [
     { title: "Menu", link: "/products" },
     { title: "Chuyện Nhà", link: "/story" },
-    { title: "Cà phê", link: "/" },
-    { title: "Trà", link: "/" },
+    { title: "Cà phê", link: "/collections" },
+    { title: "Trà", link: "/collections" },
+    { title: "Của hàng", link: "/" },
     { title: "Cảm hứng CloundFee", link: "/" },
-    { title: "Cửa hàng", link: "/" },
     { title: "Tuyển dụng", link: "/" },
   ];
 

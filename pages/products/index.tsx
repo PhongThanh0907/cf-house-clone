@@ -215,7 +215,7 @@ const ProductPage = () => {
         <div
           className={
             scrolled
-              ? "fixed w-full flex py-4 duration-300 bg-white shadow-lg lg:hidden"
+              ? "fixed w-full flex py-4 duration-300 bg-white shadow-lg lg:hidden z-50"
               : "py-4 flex duration-300 lg:hidden"
           }
         >

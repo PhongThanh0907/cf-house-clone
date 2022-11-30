@@ -50,6 +50,7 @@
   height: auto;
   overflow: hidden;
   position: relative;
+  border-radius: 10px;
 }
 
 .close-open{
