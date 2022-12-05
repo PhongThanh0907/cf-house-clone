@@ -9,7 +9,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <div className="text-gray-500 text-xs flex justify-center gap-4 lg:gap-28 p-3">
-      <Link href="/">
+      <Link href="/store">
         <div className="gap-1 flex items-center lg:gap-2">
           <MapPinIcon className="h-5 w-5 lg:h-6 lg:w-6 text-mainColor" />
           <span className="text-gray-500 hover:text-hover">

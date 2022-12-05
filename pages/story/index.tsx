@@ -6,9 +6,7 @@ import Img2 from "../../public/assets/home2.webp";
 import { TagIcon } from "@heroicons/react/24/outline";
 import HomeStory from "../../components/HomeStory";
 
-type Props = {};
-
-const StoryPage = (props: Props) => {
+const StoryPage = () => {
   const [activeStory, setActiveStory] = useState("Tất cả");
   const listStory = [
     { title: "Tất cả", link: "/" },

@@ -1,18 +1,18 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import img1 from "../public/assets/location1jpg.jpg";
 import {
   ShoppingCartIcon,
   BuildingStorefrontIcon,
   CodeBracketIcon,
 } from "@heroicons/react/24/outline";
+import { Store } from "../types/store";
+import Slider from "./Slider";
 
-type Props = {};
+interface Props {
+  store: Store;
+}
 
-const ItemLocation = (props: Props) => {
-  const listImg = [img1, img1, img1];
-
+const ItemLocation = ({ store }: Props) => {
   const listItem = [
     { icon: <CodeBracketIcon className="h-5 w-5" />, text: "Có chỗ đỗ xe hơi" },
     {
@@ -24,16 +24,17 @@ const ItemLocation = (props: Props) => {
 
   return (
     <div>
-      <div className="box-zoom-transfer">
-        <Image
+      <div className="box-zoom-transfer h-[250px]">
+        <Slider listImage={store?.imageStore} height={"250px"} />
+        {/* <Image
           className="hover:scale-125 transition-all duration-500 hover:rotate-6 rounded-xl hover:rounded-xl"
           src={img1}
           alt="img"
-        />
+        /> */}
       </div>
       <div>
-        <h2 className="text-lg my-2 font-semibold">HCM Lữ Gia</h2>
-        <Link href="https://goo.gl/maps/d5hoghn4Ai4EY8No6">
+        <h2 className="text-lg my-2 font-semibold">{store?.nameStore}</h2>
+        <Link href={`${store?.link}`}>
           <div className="relative h-[40px] group bg-[#FFF7E6] w-full text-[#B3DDCA] rounded-lg border border-[#FFF7E6]">
             <h4 className="absolute  flex justify-center items-center top-0 left-0 right-0 bottom-0 z-20 group-hover:text-mainColor font-semibold duration-300">
               Xem bản đồ
@@ -45,9 +46,7 @@ const ItemLocation = (props: Props) => {
         <div className="h-[3px] w-full my-4 bg-gray-200" />
       </div>
       <div>
-        <h4 className="text-md my-2">
-          64A Lữ Gia, Phường 15, Quận 11, Hồ Chí Minh
-        </h4>
+        <h4 className="text-md my-2">{store?.address}</h4>
         <h4 className="text-md mb-2">07:30 - 22:00</h4>
       </div>
       <div className="grid grid-cols-2 gap-y-2">

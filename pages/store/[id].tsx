@@ -1,21 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import ItemLocation from "../../components/ItemLocation";
 import Layout from "../../components/Layout";
+import { useFetch } from "../../hooks/useFetch";
 import background from "../../public/assets/backgroundstore.webp";
-
-type Props = {};
+import { Store } from "../../types/store";
 
 const StorePage = () => {
+  const router = useRouter();
+  const { query } = router;
+  const {
+    data: stores,
+    // isLoading,
+    // error,
+  } = useFetch("stores/", query.type);
+  console.log(stores);
+  console.log(query);
+
+  const fetchStoreByType = (path: string, value: any) => {
+    router.push({
+      pathname: `/store/${path}`,
+      query: {
+        typeLocation: value,
+      },
+    });
+  };
+
   const listLocation = [
-    { location: "Hồ Chí Minh", value: "71" },
-    { location: "Hà Nội", value: "41" },
-    { location: "Hải Phòng", value: "9" },
-    { location: "Đà Nẵng", value: "5" },
-    { location: "Tây Ninh", value: "2" },
-    { location: "Cần Thơ", value: "3" },
-    { location: "Nha Trang", value: "3" },
+    { location: "Hồ Chí Minh", value: "hcm" },
+    { location: "Hà Nội", value: "hn" },
+    { location: "Hải Phòng", value: "hp" },
+    { location: "Đà Nẵng", value: "dn" },
   ];
 
   const listDistrict = [
@@ -46,25 +63,34 @@ const StorePage = () => {
         />
         <div className="bg-black/30 absolute top-0 bottom-0 right-0 left-0" />
         <h4 className="absolute z-20 text-white top-0 bottom-0 flex items-center right-0 left-0 justify-center text-sm lg:text-2xl font-semibold">
-          Hệ thống 154 cửa hàng The Coffee House toàn quốc
+          Hệ thống {stores.length} cửa hàng The Coffee House toàn quốc
         </h4>
       </div>
       <div className="max-w-7xl hidden flex-row mx-auto lg:flex">
         <div className="flex flex-col w-[300px] items-center border-r-2 border-gray-200 my-10">
           <h4 className="mb-4 font-semibold text-lg">Theo khu vực</h4>
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-3">
             {listLocation.map((item, index) => (
-              <Link key={index} href="/store">
-                <p className="text-md hover:text-hover">
-                  {item.location} ({item.value})
+              <div key={index}>
+                <p
+                  onClick={() => fetchStoreByType(item.value, item.value)}
+                  className="text-md hover:text-hover"
+                >
+                  {item.location} (
+                  {
+                    stores.filter(
+                      (itemType: Store) => itemType.location === item.value
+                    ).length
+                  }
+                  )
                 </p>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
         <div className="m-10 flex-1">
           <h4 className="text-xl font-semibold">
-            Khám phá 71 cửa hàng của chúng tôi ở Tp Hồ Chí Minh
+            Khám phá {stores.length} cửa hàng của chúng tôi ở Tp Hồ Chí Minh
           </h4>
           <select
             className="w-[30%] border border-gray-300 focus:outline-none px-3 py-2 text-sm rounded-lg my-4"
@@ -78,8 +104,11 @@ const StorePage = () => {
             ))}
           </select>
           <div className="grid grid-cols-2 gap-6">
-            <ItemLocation />
-            <ItemLocation />
+            {stores.map((item: Store) => (
+              <>
+                <ItemLocation key={item._id} store={item} />
+              </>
+            ))}
           </div>
         </div>
       </div>
@@ -96,8 +125,11 @@ const StorePage = () => {
           ))}
         </select>
         <div className="grid grid-cols-1 gap-10">
-          <ItemLocation />
-          <ItemLocation />
+          {stores.map((item: Store) => (
+            <>
+              <ItemLocation key={item._id} store={item} />
+            </>
+          ))}
         </div>
       </div>
     </Layout>
