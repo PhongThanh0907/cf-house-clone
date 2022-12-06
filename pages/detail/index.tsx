@@ -1,86 +1,164 @@
-import Image from "next/image";
-import { it } from "node:test";
-import React from "react";
+/* eslint-disable @next/next/no-img-element */
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import React, { useEffect, useState } from "react";
 import CheckoutWizard from "../../components/CheckoutWizard";
 import Layout from "../../components/Layout";
-import img1 from "../../public/assets/collection1.webp";
+import { baseURL } from "../../service/axiosClient";
+import { Product } from "../../types/product";
 
-type Props = {};
+const listSize = [
+  { size: "Nhỏ", price: 0, status: 1 },
+  { size: "Vừa", price: 6000, status: 2 },
+  { size: "Lớn", price: 10000, status: 3 },
+];
+type Topping = {
+  name: string;
+  price: number;
+  status: number;
+};
+const listTopping: Topping[] = [
+  { name: "Kem Phô Mai Macchiato", price: 10000, status: 1 },
+  { name: "Shot Espresso", price: 10000, status: 2 },
+  { name: "Trân châu trắng", price: 10000, status: 3 },
+  { name: "Sốt Caramel", price: 10000, status: 4 },
+  { name: "Thạch Cà Phê", price: 10000, status: 5 },
+];
 
-const index = (props: Props) => {
-  const listSize = [
-    { size: "Nhỏ", price: 0 },
-    { size: "Vừa", price: 6000 },
-    { size: "Lớn", price: 10000 },
-  ];
-  const listTopping = [
-    { name: "Kem Phô Mai Macchiato", price: 10000 },
-    { name: "Shot Espresso", price: 10000 },
-    { name: "Trân châu trắng", price: 10000 },
-    { name: "Sốt Caramel", price: 10000 },
-    { name: "Thạch Cà Phê", price: 10000 },
-  ];
+type Data = Product;
+
+export const getServerSideProps: GetServerSideProps<{ data: Data }> = async (
+  context
+) => {
+  const id = context.query.idProduct;
+  const res = await fetch(`${baseURL}/products/${id}`);
+  const data: Data = await res.json();
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
+const DetailPage = ({
+  data,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [pickSize, setPickSize] = useState<number>(0);
+  const [priceSize, setPriceSize] = useState<number>(0);
+  const [priceTopping, setPriceTopping] = useState<number>(10000);
+  // const [listPickTopping, setListPickTopping] = useState<
+  //   Pick<Topping, "status">[]
+  // >([]);
+  const [listPickTopping, setListPickTopping] = useState<Topping[]>([]);
+
+  const toggleSize = (price: number, status: number) => {
+    setPickSize(status);
+    setPriceSize(price);
+  };
+
+  const toggleTopping = (param: Topping) => {
+    if (!listPickTopping.some((item) => item.status == param.status)) {
+      setListPickTopping([...listPickTopping, param]);
+    } else
+      setListPickTopping(
+        listPickTopping.filter((item) => item.status !== param.status)
+      );
+  };
+
+  const totalPrice = data?.price + priceSize + priceTopping;
+
+  useEffect(() => {
+    if (listPickTopping.length < 1) {
+      setPriceTopping(0);
+    } else {
+      setPriceTopping(
+        listPickTopping.map((i) => i.price).reduce((total, cv) => total + cv)
+      );
+    }
+  }, [listPickTopping]);
+
   return (
     <Layout title="Sản phẩm">
       <CheckoutWizard
         activeStep={2}
-        coffeeTea="Thưởng Thức Tại Nhà"
-        nameProduct="Thùng 24 lon Cà Phê Sữa"
+        coffeeTea={`${data?.typeProduct}`}
+        nameProduct={`${data?.nameProduct}`}
       />
       <div className="max-w-7xl mx-auto px-16 grid grid-cols-2 gap-10">
         <div>
-          <Image className="w-full h-[500px]" src={img1} alt="img" />
-          <Image
+          <img
+            className="w-full h-[500px]"
+            src={data?.imageProduct}
+            alt="img"
+          />
+          <img
             className="w-24 h-24 my-4 rounded-xl border border-mainColor"
-            src={img1}
+            src={data?.imageProduct}
             alt="img"
           />
         </div>
         <div>
-          <h1 className="text-2xl font-semibold">Thùng Cà Phê Sữa Espresso</h1>
-          <p className="text-2xl text-mainColor font-semibold my-2">39.000 đ</p>
-          <div>
-            <p className="my-2">Chọn size (bắt buộc)</p>
-            <div className="space-x-4">
-              {listSize.map((item, index) => (
-                <button
-                  className="px-6 py-2 text-gray-500 border border-gray-300 rounded-lg"
-                  key={index}
-                >
-                  {item.size} + {item.price.toLocaleString("vn-VN")} đ
-                </button>
-              ))}
-            </div>
-            <p className="my-2">Topping</p>
-            <div className="">
-              {listTopping.map((item, index) => (
-                <button
-                  className="px-6 py-2 text-gray-500 border border-gray-300 rounded-lg mr-4 my-2"
-                  key={index}
-                >
-                  {item.name} + {item.price.toLocaleString("vn-VN")} đ
-                </button>
-              ))}
-            </div>
-          </div>
-          <button className="w-full bg-mainColor text-white font-semibold rounded-xl py-3 my-4">
+          <h1 className="text-2xl font-semibold">{data?.nameProduct}</h1>
+          <p className="text-2xl text-mainColor font-semibold my-2">
+            {totalPrice.toLocaleString("vn-VN")}đ
+          </p>
+          {data?.typeProduct === "cfathome" ||
+          data?.typeProduct === "tathome" ? (
+            <></>
+          ) : (
+            <>
+              <div>
+                <p className="my-2">Chọn size (bắt buộc)</p>
+                <div className="space-x-4">
+                  {listSize.map((item, index) => (
+                    <button
+                      onClick={() => toggleSize(item.price, item.status)}
+                      className={`px-6 py-2  border border-gray-300 rounded-lg ${
+                        pickSize === item.status
+                          ? "bg-mainColor duration-300 opacity-100 text-white"
+                          : "bg-white duration-300 text-gray-500"
+                      }`}
+                      key={index}
+                    >
+                      {item.size} + {item.price.toLocaleString("vn-VN")} đ
+                    </button>
+                  ))}
+                </div>
+                <p className="my-2">Topping</p>
+                <div className="">
+                  {listTopping.map((item, index) => (
+                    <button
+                      onClick={() => {
+                        toggleTopping(item);
+                      }}
+                      className={`px-6 py-2 border border-gray-300 rounded-lg mr-4 my-2 ${
+                        listPickTopping.some(
+                          (itemTopping) => itemTopping.status === item.status
+                        )
+                          ? "bg-mainColor opacity-100 duration-300 text-white"
+                          : "bg-white duration-300 text-gray-500"
+                      }`}
+                      key={index}
+                    >
+                      {item.name} + {item.price.toLocaleString("vn-VN")} đ
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          <button className="w-full bg-mainColor text-white font-semibold rounded-xl py-3 my-4 hover:bg-[#ff8e14] active:bg-[#ea7900] duration-300">
             Đặt giao tận nơi
           </button>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-16 py-8 border-t border-b border-gray-200 my-4">
         <h4 className="text-lg font-semibold">Mô tả sản phẩm</h4>
-        <p>
-          Thức uống giúp tỉnh táo tức thì để bắt đầu ngày mới thật hứng khởi.
-          Không đắng khét như cà phê truyền thống, The Coffee House Sữa Đá mang
-          hương vị hài hoà đầy lôi cuốn. Là sự đậm đà của 100% cà phê Arabica
-          Cầu Đất rang vừa tới, biến tấu tinh tế với sữa đặc và kem sữa ngọt
-          ngào cực quyến rũ. Càng hấp dẫn hơn với topping thạch 100% cà phê
-          nguyên chất giúp giữ trọn vị ngon đến ngụm cuối cùng.
-        </p>
+        <p>{data?.description}</p>
       </div>
     </Layout>
   );
 };
 
-export default index;
+export default DetailPage;

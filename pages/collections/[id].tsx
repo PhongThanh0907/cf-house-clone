@@ -13,8 +13,6 @@ const CollectionPage = () => {
     // isLoading,
     // error,
   } = useFetch("products/", query.typeProduct);
-  console.log(query);
-  console.log(products);
   return (
     <div>
       <Layout title="Cà phê tại nhà">
@@ -22,13 +20,9 @@ const CollectionPage = () => {
           {query.typeProduct === "cfathome" ? "Cà Phê Tại Nhà" : "Trà Tại Nhà"}
         </h1>
         <div className="grid grid-cols-1 px-4 lg:px-0 lg:grid-cols-4 max-w-7xl mx-auto gap-8 gap-y-4 lg:pb-6">
-          {products.map((item: Product) => (
+          {products?.map((item: Product) => (
             <div key={item._id}>
-              <ItemCollection
-                img={item.imageProduct}
-                name={item.nameProduct}
-                price={item.price}
-              />
+              <ItemCollection itemProduct={item} />
             </div>
           ))}
         </div>

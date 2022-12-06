@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import ItemLocation from "../../components/ItemLocation";
@@ -15,24 +14,25 @@ const StorePage = () => {
     data: stores,
     // isLoading,
     // error,
-  } = useFetch("stores/", query.type);
+  } = useFetch("stores/", undefined, query.typeLocation);
   console.log(stores);
   console.log(query);
 
-  const fetchStoreByType = (path: string, value: any) => {
+  const fetchStoreByType = (path: string, value: any, location: string) => {
     router.push({
       pathname: `/store/${path}`,
       query: {
         typeLocation: value,
+        location: location,
       },
     });
   };
 
   const listLocation = [
-    { location: "Hồ Chí Minh", value: "hcm" },
-    { location: "Hà Nội", value: "hn" },
-    { location: "Hải Phòng", value: "hp" },
-    { location: "Đà Nẵng", value: "dn" },
+    { location: "Hồ Chí Minh", value: "hcm", total: "4" },
+    { location: "Hà Nội", value: "hn", total: "2" },
+    { location: "Hải Phòng", value: "hp", total: "1" },
+    { location: "Đà Nẵng", value: "dn", total: "2" },
   ];
 
   const listDistrict = [
@@ -73,16 +73,12 @@ const StorePage = () => {
             {listLocation.map((item, index) => (
               <div key={index}>
                 <p
-                  onClick={() => fetchStoreByType(item.value, item.value)}
+                  onClick={() =>
+                    fetchStoreByType(item.value, item.value, item.location)
+                  }
                   className="text-md hover:text-hover"
                 >
-                  {item.location} (
-                  {
-                    stores.filter(
-                      (itemType: Store) => itemType.location === item.value
-                    ).length
-                  }
-                  )
+                  {item.location} ({item.total})
                 </p>
               </div>
             ))}
@@ -90,7 +86,8 @@ const StorePage = () => {
         </div>
         <div className="m-10 flex-1">
           <h4 className="text-xl font-semibold">
-            Khám phá {stores.length} cửa hàng của chúng tôi ở Tp Hồ Chí Minh
+            Khám phá {stores.length} cửa hàng của chúng tôi ở{" "}
+            {query.location ? query.location : "Việt Nam"}
           </h4>
           <select
             className="w-[30%] border border-gray-300 focus:outline-none px-3 py-2 text-sm rounded-lg my-4"

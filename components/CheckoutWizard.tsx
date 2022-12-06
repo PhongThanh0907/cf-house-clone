@@ -19,7 +19,7 @@ const CheckoutWizard = ({ activeStep = 0, coffeeTea, nameProduct }: Props) => {
       ].map((step, index) => (
         <div
           key={index}
-          className={`flex text-sm font-semibold pt-8  
+          className={`flex text-sm font-semibold pt-8  capitalize
           text-center ${index <= activeStep ? "" : "hidden"} ${
             index === activeStep ? "text-gray-500" : ""
           }`}

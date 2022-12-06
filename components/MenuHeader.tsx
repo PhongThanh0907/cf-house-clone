@@ -63,9 +63,9 @@ const MenuHeader = () => {
       value: [],
     },
     {
-      title: "Tuyển dụng",
-      path: "/products",
-      type: "/all",
+      title: "Tài khoản",
+      path: "/login",
+      type: "",
       value: [],
     },
   ];

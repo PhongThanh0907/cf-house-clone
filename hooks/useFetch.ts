@@ -21,14 +21,19 @@ function fetchReducer(state: any, action: any) {
   }
 }
 
-export const useFetch = (url: string, typeProduct?: any) => {
+export const useFetch = (
+  url: string,
+  typeProduct?: any,
+  typeLocation?: any,
+  id?: any,
+) => {
   const [state, dispatch] = useReducer(fetchReducer, {
     data: [],
     isLoading: false,
     error: null,
   });
-  console.log(typeProduct)
-
+  console.log(typeProduct);
+  console.log(typeLocation)
   useEffect(() => {
     (async () => {
       dispatch({
@@ -36,25 +41,46 @@ export const useFetch = (url: string, typeProduct?: any) => {
         isLoading: true,
       });
       try {
-        console.log(typeProduct)
+        console.log(typeProduct);
         if (typeProduct !== undefined) {
-          const res:[] = await axiosClient.get(url);
-          const dataFilter = res.filter(
-            (item: Product) => typeProduct.includes(item?.typeProduct)
+          const res: [] = await axiosClient.get(url);
+          const data = res.filter((item: Product) =>
+            typeProduct.includes(item?.typeProduct)
           );
           dispatch({
             type: "fetchAPI/success",
             isLoading: false,
             error: null,
-            data: dataFilter,
+            data: data,
           });
-        } else {
-          const dataProduct = await axiosClient(url);
+        } else if (typeLocation !== undefined) {
+          console.log(typeLocation)
+          const res: [] = await axiosClient.get(url);
+          console.log(res)
+          const data = res.filter((item: Store) =>
+            typeLocation.includes(item?.location)
+          );
           dispatch({
             type: "fetchAPI/success",
             isLoading: false,
             error: null,
-            data: dataProduct,
+            data: data,
+          });
+        } else if (id !== undefined) {
+          const data = await axiosClient.get(`${url}/${id}`);
+          dispatch({
+            type: "fetchAPI/success",
+            isLoading: false,
+            error: null,
+            data: data,
+          });
+        } else {
+          const data = await axiosClient(url);
+          dispatch({
+            type: "fetchAPI/success",
+            isLoading: false,
+            error: null,
+            data: data,
           });
         }
       } catch (err) {
@@ -66,7 +92,7 @@ export const useFetch = (url: string, typeProduct?: any) => {
         });
       }
     })();
-  }, [url, typeProduct]);
+  }, [url, typeProduct, typeLocation, id]);
 
   // return { data: state.data, isLoading: state.isLoading, error: state.error};
   return { ...state };

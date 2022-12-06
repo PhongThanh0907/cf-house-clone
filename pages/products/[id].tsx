@@ -17,7 +17,9 @@ const ProductPage = () => {
     // isLoading,
     // error,
   } = useFetch("products/", query.typeProduct);
+  console.log("sddddddddddddddddddddddddddddddddd");
 
+  useEffect(() => {}, []);
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 50) {
@@ -243,10 +245,11 @@ const ProductPage = () => {
             className="w-[92%] mx-auto border border-gray-500 py-2 px-3 rounded-xl"
             name="cars"
             id="cars"
-            // onClick={(e) => {
-            //   e.stopPropagation();
-            //   fetchProductByType(e.target.value, e.target.value);
-            // }}
+            onChange={(e) => {
+              console.log(e.target.value);
+              e.stopPropagation();
+              fetchProductByType(e.target.value, e.target.value, "");
+            }}
           >
             {menuItem.map((item, index) => (
               <option key={index} value={item.path}>
@@ -264,10 +267,11 @@ const ProductPage = () => {
             .map((item: Product) => (
               <div key={item._id}>
                 <ItemProduct
-                  img={item.imageProduct}
-                  name={item.nameProduct}
-                  price={item.price}
-                  link={item._id}
+                  // img={item.imageProduct}
+                  // name={item.nameProduct}
+                  // price={item.price}
+                  // link={item._id}
+                  itemProduct={item}
                 />
               </div>
             ))}
