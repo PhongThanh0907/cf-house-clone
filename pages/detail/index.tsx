@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CheckoutWizard from "../../components/CheckoutWizard";
 import Layout from "../../components/Layout";
 import { baseURL } from "../../service/axiosClient";
@@ -50,6 +52,7 @@ const DetailPage = ({
   //   Pick<Topping, "status">[]
   // >([]);
   const [listPickTopping, setListPickTopping] = useState<Topping[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const toggleSize = (price: number, status: number) => {
     setPickSize(status);
@@ -66,6 +69,24 @@ const DetailPage = ({
   };
 
   const totalPrice = data?.price + priceSize + priceTopping;
+
+  const handleOrder = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      toast.success("Đã thêm vào giỏ hàng!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }, 2000);
+  };
 
   useEffect(() => {
     if (listPickTopping.length < 1) {
@@ -148,9 +169,25 @@ const DetailPage = ({
             </>
           )}
 
-          <button className="w-full bg-mainColor text-white font-semibold rounded-xl py-3 my-4 hover:bg-[#ff8e14] active:bg-[#ea7900] duration-300">
-            Đặt giao tận nơi
-          </button>
+          {loading ? (
+            <div className="lds-ring my-4  w-full flex justify-center">
+              <div />
+              <div />
+              <div />
+              <div />
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                // notify();
+                handleOrder();
+              }}
+              className="w-full bg-mainColor text-white font-semibold rounded-xl py-3 my-4 hover:bg-[#ff8e14] active:bg-[#ea7900] duration-300"
+            >
+              Đặt giao tận nơi
+              <ToastContainer />
+            </button>
+          )}
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-16 py-8 border-t border-b border-gray-200 my-4">

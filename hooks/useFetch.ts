@@ -32,8 +32,6 @@ export const useFetch = (
     isLoading: false,
     error: null,
   });
-  console.log(typeProduct);
-  console.log(typeLocation)
   useEffect(() => {
     (async () => {
       dispatch({
@@ -41,7 +39,6 @@ export const useFetch = (
         isLoading: true,
       });
       try {
-        console.log(typeProduct);
         if (typeProduct !== undefined) {
           const res: [] = await axiosClient.get(url);
           const data = res.filter((item: Product) =>
@@ -54,9 +51,7 @@ export const useFetch = (
             data: data,
           });
         } else if (typeLocation !== undefined) {
-          console.log(typeLocation)
           const res: [] = await axiosClient.get(url);
-          console.log(res)
           const data = res.filter((item: Store) =>
             typeLocation.includes(item?.location)
           );
@@ -94,6 +89,5 @@ export const useFetch = (
     })();
   }, [url, typeProduct, typeLocation, id]);
 
-  // return { data: state.data, isLoading: state.isLoading, error: state.error};
   return { ...state };
 };

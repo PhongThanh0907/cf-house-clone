@@ -35,4 +35,4 @@ const Layout = ({ title, children }: Props) => {
   );
 };
 
-export default Layout;
+export default React.memo(Layout);

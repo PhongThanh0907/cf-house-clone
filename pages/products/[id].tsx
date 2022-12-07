@@ -17,7 +17,6 @@ const ProductPage = () => {
     // isLoading,
     // error,
   } = useFetch("products/", query.typeProduct);
-  console.log("sddddddddddddddddddddddddddddddddd");
 
   useEffect(() => {}, []);
   useEffect(() => {
@@ -185,7 +184,6 @@ const ProductPage = () => {
                   className="whitespace-nowrap h-auto w-24 "
                   onClick={(e) => {
                     setActiveMenu(item.path);
-                    console.log("hggh");
                     e.stopPropagation();
                     fetchProductByType(item.path, item.value, item.title);
                   }}
@@ -246,7 +244,6 @@ const ProductPage = () => {
             name="cars"
             id="cars"
             onChange={(e) => {
-              console.log(e.target.value);
               e.stopPropagation();
               fetchProductByType(e.target.value, e.target.value, "");
             }}
@@ -305,4 +302,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default React.memo(ProductPage);

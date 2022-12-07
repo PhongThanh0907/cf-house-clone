@@ -547,4 +547,4 @@ const MenuHeader = () => {
   );
 };
 
-export default MenuHeader;
+export default React.memo(MenuHeader);

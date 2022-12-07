@@ -15,8 +15,6 @@ const StorePage = () => {
     // isLoading,
     // error,
   } = useFetch("stores/", undefined, query.typeLocation);
-  console.log(stores);
-  console.log(query);
 
   const fetchStoreByType = (path: string, value: any, location: string) => {
     router.push({
